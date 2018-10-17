@@ -5,3 +5,5 @@ master modify again
 master modify b
 
 works in dev. not in master
+
+modify in branch a
