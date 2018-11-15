@@ -3,22 +3,6 @@ from multiprocessing import Pool
 import time
 
 
-def using_subprocess_wait(x):
-    print('%i got!' % x)
-    one = subprocess.Popen('sleep 10', shell=True)
-    one.wait()
-    print('%i ended!' % x)
-    return 1
-
-
-def using_subprocess_timeout(x):
-    print('%i got!' % x)
-    one = subprocess.Popen('sleep 10', shell=True)
-    one.wait(timeout=2)
-    print('%i ended!' % x)
-    return 1
-
-
 def sleeping_10(x):
     print('%i got!' % x)
     for i in range(0, 10):
@@ -44,16 +28,16 @@ def dead_loop(x):
 
 
 if __name__ == '__main__':
-    # with Pool(processes=2) as pool:
-    #     tasks = [pool.apply_async(sleeping_10, (x,)) for x in range(0, 2)]
-    #     result = []
-    #     for one in tasks:
-    #         try:
-    #             result.append(one.get(timeout=2))
-    #         except:
-    #             print('catch error!')
-    #             result.append(None)
-    #     print(result)
+    with Pool(processes=2) as pool:
+        tasks = [pool.apply_async(sleeping_10, (x,)) for x in range(0, 2)]
+        result = []
+        for one in tasks:
+            try:
+                result.append(one.get(timeout=2))
+            except:
+                print('catch error!')
+                result.append(None)
+        print(result)
     """
     output is:
         0 got!
@@ -74,15 +58,15 @@ if __name__ == '__main__':
     IDLE, it tooks shorter to trigger the ticks.
     """
 
-    # with Pool(processes=2) as pool:
-    #     tasks = [pool.apply_async(dead_loop, (x,)) for x in range(0, 2)]
-    #     result = []
-    #     for one in tasks:
-    #         try:
-    #             result.append(one.get(timeout=2))
-    #         except:
-    #             result.append(None)
-    #     print(result)
+    with Pool(processes=2) as pool:
+        tasks = [pool.apply_async(dead_loop, (x,)) for x in range(0, 2)]
+        result = []
+        for one in tasks:
+            try:
+                result.append(one.get(timeout=2))
+            except:
+                result.append(None)
+        print(result)
     """
     output is:
         0 got!
@@ -90,16 +74,16 @@ if __name__ == '__main__':
         [None, None]
     """
 
-    # with Pool(processes=2) as pool:
-    #     tasks = [pool.apply_async(sleeping_x, (x,)) for x in range(1, 5)]
-    #     result = []
-    #     for one in tasks:
-    #         try:
-    #             result.append(one.get(timeout=2))
-    #         except:
-    #             print('catch error!')
-    #             result.append(None)
-    #     print(result)
+    with Pool(processes=2) as pool:
+        tasks = [pool.apply_async(sleeping_x, (x,)) for x in range(1, 5)]
+        result = []
+        for one in tasks:
+            try:
+                result.append(one.get(timeout=2))
+            except:
+                print('catch error!')
+                result.append(None)
+        print(result)
     """
     1 got!
     2 got!
@@ -122,7 +106,3 @@ if __name__ == '__main__':
     4 process, ticks 3
     4 ended!
     """
-
-    with Pool(processes=2) as pool:
-        tasks = [pool.apply_async(using_subprocess_wait, (x,)) for x in range(0, 2)]
-        result = []
